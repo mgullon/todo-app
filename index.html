@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
       *,
       *::before,
@@ -14,120 +17,232 @@
       }
 
       :root {
-        --color-bg: #f0f2f5;
+        --color-bg: #eef2ff;
         --color-card: #ffffff;
-        --color-card-shadow: rgba(0, 0, 0, 0.08);
-        --color-text-primary: #1a1a2e;
-        --color-text-muted: #aaa;
-        --color-border: #e0e0e0;
-        --color-item-bg: #f8f8fb;
-        --color-item-border: #e8e8f0;
-        --color-item-hover: #f0f0fa;
+        --color-card-shadow: rgba(79, 70, 229, 0.12);
+        --color-text-primary: #1e1b4b;
+        --color-text-secondary: #4b5563;
+        --color-text-muted: #9ca3af;
+        --color-border: #e0e7ff;
+        --color-item-bg: #f5f7ff;
+        --color-item-border: #e0e7ff;
+        --color-item-hover: #eef2ff;
         --color-primary: #4f46e5;
         --color-primary-hover: #4338ca;
-        --color-delete: #ccc;
+        --color-primary-light: #e0e7ff;
+        --color-success: #10b981;
+        --color-delete: #d1d5db;
         --color-delete-hover: #ef4444;
         --color-delete-hover-bg: #fef2f2;
+        --color-progress-track: #e0e7ff;
+        --color-progress-fill: #4f46e5;
+        --gradient-header: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        --radius-card: 20px;
+        --radius-item: 12px;
+        --shadow-card: 0 8px 40px var(--color-card-shadow);
+        --shadow-btn: 0 4px 12px rgba(79, 70, 229, 0.35);
       }
 
       [data-theme="dark"] {
-        --color-bg: #0f0f1a;
-        --color-card: #1e1e2e;
-        --color-card-shadow: rgba(0, 0, 0, 0.4);
-        --color-text-primary: #e2e2f0;
-        --color-text-muted: #6b6b8a;
-        --color-border: #3a3a5c;
-        --color-item-bg: #2a2a3e;
-        --color-item-border: #3a3a5c;
-        --color-item-hover: #32324a;
-        --color-primary: #6366f1;
-        --color-primary-hover: #4f46e5;
-        --color-delete: #555;
-        --color-delete-hover: #ef4444;
-        --color-delete-hover-bg: #3a1f1f;
+        --color-bg: #0d0d1f;
+        --color-card: #161628;
+        --color-card-shadow: rgba(0, 0, 0, 0.5);
+        --color-text-primary: #e8e8ff;
+        --color-text-secondary: #a0a0c0;
+        --color-text-muted: #5a5a7a;
+        --color-border: #2d2d50;
+        --color-item-bg: #1e1e38;
+        --color-item-border: #2d2d50;
+        --color-item-hover: #252542;
+        --color-primary: #818cf8;
+        --color-primary-hover: #6366f1;
+        --color-primary-light: #1e1e50;
+        --color-success: #34d399;
+        --color-delete: #4a4a6a;
+        --color-delete-hover: #f87171;
+        --color-delete-hover-bg: #2d1a1a;
+        --color-progress-track: #2d2d50;
+        --color-progress-fill: #818cf8;
+        --gradient-header: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+        --shadow-card: 0 8px 40px var(--color-card-shadow);
+        --shadow-btn: 0 4px 12px rgba(99, 102, 241, 0.4);
+      }
+
+      @keyframes fadeSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-12px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes fadeSlideOut {
+        from {
+          opacity: 1;
+          transform: translateX(0) scale(1);
+          max-height: 80px;
+          margin-bottom: 0;
+        }
+        to {
+          opacity: 0;
+          transform: translateX(20px) scale(0.95);
+          max-height: 0;
+          margin-bottom: -10px;
+        }
+      }
+
+      @keyframes checkPulse {
+        0% { transform: scale(1); }
+        40% { transform: scale(1.25); }
+        100% { transform: scale(1); }
+      }
+
+      @keyframes progressGrow {
+        from { width: 0; }
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background: var(--color-bg);
         min-height: 100vh;
         display: flex;
         justify-content: center;
-        padding: 48px 16px;
-        transition: background 0.25s;
+        align-items: flex-start;
+        padding: 56px 16px 80px;
+        transition: background 0.3s;
       }
 
       .card {
         background: var(--color-card);
-        border-radius: 12px;
-        box-shadow: 0 4px 24px var(--color-card-shadow);
-        padding: 32px;
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
         width: 100%;
-        max-width: 480px;
+        max-width: 500px;
         height: fit-content;
-        transition: background 0.25s, box-shadow 0.25s;
+        overflow: hidden;
+        transition: background 0.3s, box-shadow 0.3s;
       }
 
-      .card-header {
+      .card-hero {
+        background: var(--gradient-header);
+        padding: 28px 28px 24px;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
-        margin-bottom: 24px;
+        gap: 12px;
       }
 
-      h1 {
-        font-size: 1.75rem;
+      .card-hero-text h1 {
+        font-size: 1.6rem;
         font-weight: 700;
-        color: var(--color-text-primary);
+        color: #ffffff;
         letter-spacing: -0.5px;
-        transition: color 0.25s;
+        line-height: 1.2;
+      }
+
+      .card-hero-text .subtitle {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.75);
+        margin-top: 4px;
+        font-weight: 400;
       }
 
       #theme-toggle {
-        background: none;
-        border: 1px solid var(--color-border);
-        border-radius: 8px;
-        width: 38px;
-        height: 38px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 10px;
+        width: 40px;
+        height: 40px;
         font-size: 1.1rem;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: border-color 0.2s, background 0.2s;
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
         flex-shrink: 0;
+        backdrop-filter: blur(4px);
       }
 
       #theme-toggle:hover {
-        background: var(--color-item-hover);
-        border-color: var(--color-primary);
+        background: rgba(255, 255, 255, 0.25);
+        transform: rotate(15deg);
+      }
+
+      #theme-toggle:active {
+        transform: scale(0.9);
       }
 
       #theme-toggle:focus-visible {
-        outline: 2px solid var(--color-primary);
+        outline: 2px solid rgba(255, 255, 255, 0.8);
         outline-offset: 2px;
+      }
+
+      .card-body {
+        padding: 24px 28px 28px;
+      }
+
+      .progress-bar-wrap {
+        margin-bottom: 20px;
+      }
+
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        margin-bottom: 6px;
+        transition: color 0.3s;
+      }
+
+      .progress-count {
+        font-weight: 600;
+        color: var(--color-primary);
+        transition: color 0.3s;
+      }
+
+      .progress-bar-track {
+        height: 6px;
+        background: var(--color-progress-track);
+        border-radius: 99px;
+        overflow: hidden;
+        transition: background 0.3s;
+      }
+
+      .progress-bar-fill {
+        height: 100%;
+        background: var(--gradient-header);
+        border-radius: 99px;
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: progressGrow 0.5s ease-out;
       }
 
       .input-row {
         display: flex;
         gap: 8px;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
       }
 
       #todo-input {
         flex: 1;
-        padding: 10px 14px;
+        padding: 11px 16px;
         border: 2px solid var(--color-border);
-        border-radius: 8px;
-        font-size: 0.95rem;
+        border-radius: 10px;
+        font-size: 0.925rem;
+        font-family: inherit;
         color: var(--color-text-primary);
         background: var(--color-card);
         outline: none;
-        transition: border-color 0.2s, background 0.25s, color 0.25s;
+        transition: border-color 0.2s, background 0.3s, color 0.3s, box-shadow 0.2s;
       }
 
       #todo-input:focus {
         border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px var(--color-primary-light);
       }
 
       #todo-input::placeholder {
@@ -135,116 +250,222 @@
       }
 
       #add-btn {
-        padding: 10px 18px;
-        background: var(--color-primary);
+        padding: 11px 20px;
+        background: var(--gradient-header);
         color: #fff;
         border: none;
-        border-radius: 8px;
-        font-size: 0.95rem;
+        border-radius: 10px;
+        font-size: 0.925rem;
         font-weight: 600;
+        font-family: inherit;
         cursor: pointer;
         white-space: nowrap;
-        transition: background 0.2s, transform 0.1s;
+        box-shadow: var(--shadow-btn);
+        transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
       }
 
       #add-btn:hover {
-        background: var(--color-primary-hover);
+        opacity: 0.9;
+        box-shadow: 0 6px 16px rgba(79, 70, 229, 0.45);
       }
 
       #add-btn:active {
-        transform: scale(0.97);
+        transform: scale(0.96);
+        box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+      }
+
+      #add-btn:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
       }
 
       .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
         color: var(--color-text-muted);
-        font-size: 0.9rem;
-        padding: 24px 0;
-        transition: color 0.25s;
+        padding: 32px 0 8px;
+        transition: color 0.3s;
+      }
+
+      .empty-state .empty-icon {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 10px;
+        opacity: 0.5;
+      }
+
+      .empty-state .empty-text {
+        font-size: 0.875rem;
+        font-weight: 500;
       }
 
       #todo-list {
         list-style: none;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
       }
 
       .todo-item {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 12px 14px;
+        padding: 13px 16px;
         background: var(--color-item-bg);
         border: 1px solid var(--color-item-border);
-        border-radius: 8px;
-        transition: background 0.15s;
+        border-radius: var(--radius-item);
+        transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+        animation: fadeSlideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
       }
 
       .todo-item:hover {
         background: var(--color-item-hover);
+        border-color: var(--color-primary);
+        box-shadow: 0 2px 12px var(--color-card-shadow);
+        transform: translateY(-1px);
+      }
+
+      .todo-item.removing {
+        animation: fadeSlideOut 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .todo-item.completed {
+        border-color: var(--color-item-border);
+      }
+
+      .todo-checkbox-wrap {
+        display: contents;
       }
 
       .todo-item input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        accent-color: var(--color-primary);
+        appearance: none;
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--color-border);
+        border-radius: 6px;
         cursor: pointer;
-        flex-shrink: 0;
+        background: var(--color-card);
+        transition: border-color 0.2s, background 0.2s;
+        display: block;
+      }
+
+      .todo-item input[type="checkbox"]:checked {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        animation: checkPulse 0.3s ease;
+      }
+
+      .todo-item input[type="checkbox"]:checked::after {
+        content: "";
+        display: block;
+        width: 5px;
+        height: 9px;
+        border: 2px solid #fff;
+        border-top: none;
+        border-left: none;
+        transform: rotate(45deg);
+        margin: 2px auto 0;
+      }
+
+      .todo-item input[type="checkbox"]:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
       }
 
       .todo-text {
         flex: 1;
-        font-size: 0.95rem;
+        font-size: 0.925rem;
+        font-weight: 500;
         color: var(--color-text-primary);
         word-break: break-word;
-        transition: color 0.2s;
+        transition: color 0.2s, text-decoration 0.2s;
+        line-height: 1.45;
       }
 
       .todo-item.completed .todo-text {
         text-decoration: line-through;
         color: var(--color-text-muted);
+        font-weight: 400;
       }
 
       .delete-btn {
         background: none;
         border: none;
         color: var(--color-delete);
-        font-size: 1.1rem;
+        font-size: 0.85rem;
         cursor: pointer;
         line-height: 1;
-        padding: 2px 4px;
-        border-radius: 4px;
-        transition: color 0.2s, background 0.2s;
+        padding: 5px 6px;
+        border-radius: 6px;
+        transition: color 0.2s, background 0.2s, transform 0.15s;
         flex-shrink: 0;
+        opacity: 0;
+      }
+
+      .todo-item:hover .delete-btn,
+      .delete-btn:focus-visible {
+        opacity: 1;
       }
 
       .delete-btn:hover {
         color: var(--color-delete-hover);
         background: var(--color-delete-hover-bg);
+        transform: scale(1.1);
+      }
+
+      .delete-btn:active {
+        transform: scale(0.95);
+      }
+
+      .delete-btn:focus-visible {
+        outline: 2px solid var(--color-delete-hover);
+        outline-offset: 2px;
       }
     </style>
   </head>
   <body>
     <div class="card">
-      <div class="card-header">
-        <h1>My Todos</h1>
+      <div class="card-hero">
+        <div class="card-hero-text">
+          <h1>My Todos</h1>
+          <p class="subtitle">Stay organised, get things done</p>
+        </div>
         <button id="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">🌙</button>
       </div>
 
-      <div class="input-row">
-        <input
-          type="text"
-          id="todo-input"
-          placeholder="Add a new todo..."
-          maxlength="200"
-          aria-label="New todo text"
-        />
-        <button id="add-btn" aria-label="Add todo">Add</button>
-      </div>
+      <div class="card-body">
+        <div class="progress-bar-wrap" id="progress-wrap" hidden>
+          <div class="progress-label">
+            <span>Progress</span>
+            <span class="progress-count" id="progress-count">0 / 0</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progress-bar" style="width: 0%"></div>
+          </div>
+        </div>
 
-      <ul id="todo-list" aria-label="Todo list" aria-live="polite"></ul>
-      <p class="empty-state" id="empty-state">No todos yet. Add one above!</p>
+        <div class="input-row">
+          <input
+            type="text"
+            id="todo-input"
+            placeholder="Add a new todo..."
+            maxlength="200"
+            aria-label="New todo text"
+          />
+          <button id="add-btn" aria-label="Add todo">Add</button>
+        </div>
+
+        <ul id="todo-list" aria-label="Todo list" aria-live="polite"></ul>
+        <div class="empty-state" id="empty-state">
+          <span class="empty-icon">📝</span>
+          <span class="empty-text">No todos yet. Add one above!</span>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -278,11 +499,25 @@
       const addBtn = document.getElementById("add-btn");
       const list = document.getElementById("todo-list");
       const emptyState = document.getElementById("empty-state");
+      const progressWrap = document.getElementById("progress-wrap");
+      const progressBar = document.getElementById("progress-bar");
+      const progressCount = document.getElementById("progress-count");
 
       document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
 
       function updateEmptyState() {
-        emptyState.style.display = list.children.length === 0 ? "block" : "none";
+        const total = list.children.length;
+        emptyState.style.display = total === 0 ? "flex" : "none";
+        progressWrap.hidden = total === 0;
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const items = list.querySelectorAll(".todo-item:not(.removing)");
+        const total = items.length;
+        const completed = list.querySelectorAll(".todo-item.completed:not(.removing)").length;
+        progressCount.textContent = `${completed} / ${total}`;
+        progressBar.style.width = total === 0 ? "0%" : `${Math.round((completed / total) * 100)}%`;
       }
 
       function createTodoItem(text) {
@@ -294,6 +529,7 @@
         checkbox.setAttribute("aria-label", "Mark as complete");
         checkbox.addEventListener("change", () => {
           li.classList.toggle("completed", checkbox.checked);
+          updateProgress();
         });
 
         const span = document.createElement("span");
@@ -305,8 +541,12 @@
         deleteBtn.textContent = "✕";
         deleteBtn.setAttribute("aria-label", `Delete "${text}"`);
         deleteBtn.addEventListener("click", () => {
-          li.remove();
-          updateEmptyState();
+          li.classList.add("removing");
+          updateProgress();
+          li.addEventListener("animationend", () => {
+            li.remove();
+            updateEmptyState();
+          }, { once: true });
         });
 
         li.append(checkbox, span, deleteBtn);
