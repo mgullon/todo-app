@@ -13,31 +13,99 @@
         padding: 0;
       }
 
+      :root {
+        --color-bg: #f0f2f5;
+        --color-card: #ffffff;
+        --color-card-shadow: rgba(0, 0, 0, 0.08);
+        --color-text-primary: #1a1a2e;
+        --color-text-muted: #aaa;
+        --color-border: #e0e0e0;
+        --color-item-bg: #f8f8fb;
+        --color-item-border: #e8e8f0;
+        --color-item-hover: #f0f0fa;
+        --color-primary: #4f46e5;
+        --color-primary-hover: #4338ca;
+        --color-delete: #ccc;
+        --color-delete-hover: #ef4444;
+        --color-delete-hover-bg: #fef2f2;
+      }
+
+      [data-theme="dark"] {
+        --color-bg: #0f0f1a;
+        --color-card: #1e1e2e;
+        --color-card-shadow: rgba(0, 0, 0, 0.4);
+        --color-text-primary: #e2e2f0;
+        --color-text-muted: #6b6b8a;
+        --color-border: #3a3a5c;
+        --color-item-bg: #2a2a3e;
+        --color-item-border: #3a3a5c;
+        --color-item-hover: #32324a;
+        --color-primary: #6366f1;
+        --color-primary-hover: #4f46e5;
+        --color-delete: #555;
+        --color-delete-hover: #ef4444;
+        --color-delete-hover-bg: #3a1f1f;
+      }
+
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: #f0f2f5;
+        background: var(--color-bg);
         min-height: 100vh;
         display: flex;
         justify-content: center;
         padding: 48px 16px;
+        transition: background 0.25s;
       }
 
       .card {
-        background: #ffffff;
+        background: var(--color-card);
         border-radius: 12px;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 24px var(--color-card-shadow);
         padding: 32px;
         width: 100%;
         max-width: 480px;
         height: fit-content;
+        transition: background 0.25s, box-shadow 0.25s;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
       }
 
       h1 {
         font-size: 1.75rem;
         font-weight: 700;
-        color: #1a1a2e;
-        margin-bottom: 24px;
+        color: var(--color-text-primary);
         letter-spacing: -0.5px;
+        transition: color 0.25s;
+      }
+
+      #theme-toggle {
+        background: none;
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.2s, background 0.2s;
+        flex-shrink: 0;
+      }
+
+      #theme-toggle:hover {
+        background: var(--color-item-hover);
+        border-color: var(--color-primary);
+      }
+
+      #theme-toggle:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
       }
 
       .input-row {
@@ -49,25 +117,26 @@
       #todo-input {
         flex: 1;
         padding: 10px 14px;
-        border: 2px solid #e0e0e0;
+        border: 2px solid var(--color-border);
         border-radius: 8px;
         font-size: 0.95rem;
-        color: #1a1a2e;
+        color: var(--color-text-primary);
+        background: var(--color-card);
         outline: none;
-        transition: border-color 0.2s;
+        transition: border-color 0.2s, background 0.25s, color 0.25s;
       }
 
       #todo-input:focus {
-        border-color: #4f46e5;
+        border-color: var(--color-primary);
       }
 
       #todo-input::placeholder {
-        color: #aaa;
+        color: var(--color-text-muted);
       }
 
       #add-btn {
         padding: 10px 18px;
-        background: #4f46e5;
+        background: var(--color-primary);
         color: #fff;
         border: none;
         border-radius: 8px;
@@ -79,7 +148,7 @@
       }
 
       #add-btn:hover {
-        background: #4338ca;
+        background: var(--color-primary-hover);
       }
 
       #add-btn:active {
@@ -88,9 +157,10 @@
 
       .empty-state {
         text-align: center;
-        color: #aaa;
+        color: var(--color-text-muted);
         font-size: 0.9rem;
         padding: 24px 0;
+        transition: color 0.25s;
       }
 
       #todo-list {
@@ -105,20 +175,20 @@
         align-items: center;
         gap: 12px;
         padding: 12px 14px;
-        background: #f8f8fb;
-        border: 1px solid #e8e8f0;
+        background: var(--color-item-bg);
+        border: 1px solid var(--color-item-border);
         border-radius: 8px;
         transition: background 0.15s;
       }
 
       .todo-item:hover {
-        background: #f0f0fa;
+        background: var(--color-item-hover);
       }
 
       .todo-item input[type="checkbox"] {
         width: 18px;
         height: 18px;
-        accent-color: #4f46e5;
+        accent-color: var(--color-primary);
         cursor: pointer;
         flex-shrink: 0;
       }
@@ -126,20 +196,20 @@
       .todo-text {
         flex: 1;
         font-size: 0.95rem;
-        color: #1a1a2e;
+        color: var(--color-text-primary);
         word-break: break-word;
         transition: color 0.2s;
       }
 
       .todo-item.completed .todo-text {
         text-decoration: line-through;
-        color: #aaa;
+        color: var(--color-text-muted);
       }
 
       .delete-btn {
         background: none;
         border: none;
-        color: #ccc;
+        color: var(--color-delete);
         font-size: 1.1rem;
         cursor: pointer;
         line-height: 1;
@@ -150,14 +220,17 @@
       }
 
       .delete-btn:hover {
-        color: #ef4444;
-        background: #fef2f2;
+        color: var(--color-delete-hover);
+        background: var(--color-delete-hover-bg);
       }
     </style>
   </head>
   <body>
     <div class="card">
-      <h1>My Todos</h1>
+      <div class="card-header">
+        <h1>My Todos</h1>
+        <button id="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">🌙</button>
+      </div>
 
       <div class="input-row">
         <input
@@ -175,10 +248,38 @@
     </div>
 
     <script>
+      const STORAGE_KEY = "todoAppTheme";
+
+      function resolveInitialTheme() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === "dark" || saved === "light") return saved;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+
+      function applyTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        const btn = document.getElementById("theme-toggle");
+        const isDark = theme === "dark";
+        btn.textContent = isDark ? "☀️" : "🌙";
+        btn.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+        btn.setAttribute("aria-pressed", String(isDark));
+      }
+
+      function toggleTheme() {
+        const current = document.documentElement.getAttribute("data-theme") ?? "light";
+        const next = current === "dark" ? "light" : "dark";
+        localStorage.setItem(STORAGE_KEY, next);
+        applyTheme(next);
+      }
+
+      applyTheme(resolveInitialTheme());
+
       const input = document.getElementById("todo-input");
       const addBtn = document.getElementById("add-btn");
       const list = document.getElementById("todo-list");
       const emptyState = document.getElementById("empty-state");
+
+      document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
 
       function updateEmptyState() {
         emptyState.style.display = list.children.length === 0 ? "block" : "none";
